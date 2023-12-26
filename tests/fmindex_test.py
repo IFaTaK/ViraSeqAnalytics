@@ -7,7 +7,7 @@ class TestFmCheckpoints(unittest.TestCase):
     def setUp(self):
         self.bw = 'annb$aa'
                   #0123456
-        self.checkpoints = FmCheckpoints(self.bw, cpIval=2)
+        self.checkpoints = FmCheckpoints(self.bw, cp_i_val=2)
 
     def test_rank(self):
         # Test rank function for various characters and positions
@@ -41,17 +41,17 @@ class TestFmIndex(unittest.TestCase):
     def test_resolve(self):
         self.assertEqual(self.fm_index.resolve(3), 1)
 
-    def test_hasSubstring(self):
-        self.assertTrue(self.fm_index.hasSubstring('ana'))
-        self.assertFalse(self.fm_index.hasSubstring('abc'))
+    def test_has_substring(self):
+        self.assertTrue(self.fm_index.has_sub_string('ana'))
+        self.assertFalse(self.fm_index.has_sub_string('abc'))
 
-    def test_hasSuffix(self):
+    def test_has_suffix(self):
         # Testing if the method correctly identifies suffixes of the text
-        self.assertTrue(self.fm_index.hasSuffix('banana'))
-        self.assertFalse(self.fm_index.hasSuffix('banan'))
-        self.assertTrue(self.fm_index.hasSuffix('anana'))
-        self.assertTrue(self.fm_index.hasSuffix('a'))
-        self.assertTrue(self.fm_index.hasSuffix(''))
+        self.assertTrue(self.fm_index.has_suffix('banana'))
+        self.assertFalse(self.fm_index.has_suffix('banan'))
+        self.assertTrue(self.fm_index.has_suffix('anana'))
+        self.assertTrue(self.fm_index.has_suffix('a'))
+        self.assertTrue(self.fm_index.has_suffix(''))
 
     def test_occurrences(self):
         self.assertEqual(sorted(self.fm_index.occurrences('ana')), [1, 3])

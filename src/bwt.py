@@ -6,9 +6,9 @@ facilitating data compression algorithms.
 Functions:
 - rotations(text): Generates all rotations of a given text.
 - bwm(text): Constructs the Burrows-Wheeler Matrix (BWM) from the text.
-- bwtFromBwm(text): Generates BWT from BWM.
-- suffixArray(text): Constructs the suffix array for a given text.
-- bwtFromSA(text): Generates BWT using the suffix array.
+- bwt_from_bwm(text): Generates BWT from BWM.
+- suffix_array(text): Constructs the suffix array for a given text.
+- bwt_from_sa(text): Generates BWT using the suffix array.
 - BWTransform: Class that encapsulates BWT functionalities, including the inverse transform.
 """
 
@@ -41,7 +41,7 @@ def bwm(text):
     """
     return sorted(rotations(text))
 
-def bwtFromBwm(text):
+def bwt_from_bwm(text):
     """
     Generate the Burrows-Wheeler Transform (BWT) from the BWM.
 
@@ -53,7 +53,7 @@ def bwtFromBwm(text):
     """
     return ''.join(map(lambda x: x[-1], bwm(text)))
 
-def suffixArray(text):
+def suffix_array(text):
     """
     Construct the suffix array for a given text, appending '$' if not present.
     The suffix array is an array of integers providing the starting positions 
@@ -70,7 +70,7 @@ def suffixArray(text):
 
     return map(lambda x: x[1], sorted([(text[idx:], idx) for idx in range(len(text))]))
 
-def bwtFromSA(text):
+def bwt_from_sa(text):
     """
     Generate the Burrows-Wheeler Transform (BWT) using the suffix array.
 
@@ -81,7 +81,7 @@ def bwtFromSA(text):
     - str: The BWT of the text.
     """
     bwt = []
-    for suffix_idx in suffixArray(text):
+    for suffix_idx in suffix_array(text):
         if suffix_idx == 0:
             bwt.append('$')
         else:
@@ -95,7 +95,7 @@ class BWTransform:
     Attributes:
     - bwt (str): The Burrows-Wheeler Transform of the given text.
     - bwm (list): The Burrows-Wheeler Matrix of the text.
-    - suffixArray (iterator): The suffix array of the text.
+    - suffix_array (iterator): The suffix array of the text.
 
     Methods:
     - inverse_transform(): Reconstructs the original text from its BWT.
@@ -108,9 +108,9 @@ class BWTransform:
         Args:
         - text (str): The input text to be transformed.
         """
-        self.bwt = bwtFromSA(text)
+        self.bwt = bwt_from_sa(text)
         self.bwm = bwm(text)
-        self.suffixArray = suffixArray(text)
+        self.suffix_array = suffix_array(text)
 
     def __repr__(self):
         """
