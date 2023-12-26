@@ -12,9 +12,9 @@ in the text, and locating all occurrences of a pattern.
 """
 
 try:
-    from bwt import suffixArray, bwtFromSA
+    from bwt import suffix_array, bwt_from_sa
 except ImportError:
-    from src.bwt import suffixArray, bwtFromSA
+    from src.bwt import suffix_array, bwt_from_sa
 
 class FmCheckpoints(object):
     """
@@ -24,22 +24,22 @@ class FmCheckpoints(object):
 
     Attributes:
     - cps (dict): Checkpoints storing the cumulative count of each character.
-    - cpIval (int): Spacing between checkpoints.
+    - cp_i_val (int): Spacing between checkpoints.
 
     Methods:
     - rank(bw, char, row): Returns the number of occurrences of 'char' in the BWT up to a given row.
     """
-    
-    def __init__(self, bw, cpIval=4):
+
+    def __init__(self, bw, cp_i_val=4):
         """
         Initializes the FmCheckpoints object by scanning the BWT and creating periodic checkpoints.
 
         Args:
         - bw (str): The Burrows-Wheeler Transform of a string.
-        - cpIval (int, optional): Interval between checkpoints. Defaults to 4.
+        - cp_i_val (int, optional): Interval between checkpoints. Defaults to 4.
         """
         self.cps = {}        # Checkpoints for each character
-        self.cpIval = cpIval # Spacing between checkpoints
+        self.cp_i_val = cp_i_val # Spacing between checkpoints
         char_count = {}       # Counter for occurrences of each character
 
         # Initialize character count and checkpoints for each unique character in BWT
@@ -50,10 +50,10 @@ class FmCheckpoints(object):
         # Build checkpoints at regular intervals
         for idx, char in enumerate(bw):
             char_count[char] += 1
-            if (idx % cpIval) == 0:
-                for key in char_count.keys():
-                    self.cps[key].append(char_count[key])
-    
+            if (idx % cp_i_val) == 0:
+                for key,item in char_count.items():
+                    self.cps[key].append(item)
+
     def rank(self, bw, char, row):
         """
         Returns the number of occurrences of 'char' in the BWT up to and including a given row.
@@ -69,14 +69,14 @@ class FmCheckpoints(object):
         if row < 0 or char not in self.cps:
             return 0
 
-        idx, numberOcc = row, 0
+        idx, num_occ = row, 0
         # Calculate rank by walking left (up) and counting occurrences of 'char'
-        while (idx % self.cpIval) != 0:
+        while (idx % self.cp_i_val) != 0:
             if bw[idx] == char:
-                numberOcc += 1
+                num_occ += 1
             idx -= 1
 
-        return self.cps[char][idx // self.cpIval] + numberOcc
+        return self.cps[char][idx // self.cp_i_val] + num_occ
 
 class FmIndex():
     """
@@ -95,13 +95,13 @@ class FmIndex():
     - count(c): Returns the number of occurrences of characters less than 'c'.
     - range(p): Finds the range of rows in the BWT that match a given prefix 'p'.
     - resolve(row): Converts a row in the BWT to its corresponding suffix array index.
-    - hasSubstring(p): Checks if 'p' is a substring of the text.
-    - hasSuffix(p): Checks if 'p' is a suffix of the text.
+    - has_sub_string(p): Checks if 'p' is a substring of the text.
+    - has_suffix(p): Checks if 'p' is a suffix of the text.
     - occurrences(p): Finds all occurrences of 'p' in the text.
     """
-    
+
     @staticmethod
-    def downsampleSuffixArray(sa, n=4):
+    def downsamplesuffix_array(sa, n=4):
         """
         Creates a downsampled version of the suffix array. Retains only every nth entry to reduce space complexity.
 
@@ -113,33 +113,33 @@ class FmIndex():
         - dict: A map from row indices in the BWT to their corresponding suffix array values.
         """
         sampled_sa = {}
-        for i in range(0, len(sa)):
+        for i,sai in enumerate(sa):
             # We could use i % n instead of sa[i] % n, but we lose the
             # constant-time guarantee for resolutions
-            if sa[i] % n == 0:
-                sampled_sa[i] = sa[i]
+            if sai % n == 0:
+                sampled_sa[i] = sai
         return sampled_sa
-    
-    def __init__(self, text, cpIval=4):
+
+    def __init__(self, text, cp_i_val=4):
         """
         Initializes the FM-index for the given text. Adds a terminal character ('$') if not present,
         computes the BWT and initializes other required data structures.
 
         Args:
         - text (str): The text to index.
-        - cpIval (int, optional): The interval between rank checkpoints and suffix array samples.
+        - cp_i_val (int, optional): The interval between rank checkpoints and suffix array samples.
         """
         if text[-1] != '$':
             text += '$' # add dollar if not there already
         # Get BWT string and offset of $ within it
-        sa = list(suffixArray(text))
-        self.bwt = bwtFromSA(text)
-        # Get downsampled suffix array, taking every 1 out of 'cpIval'
+        sa = list(suffix_array(text))
+        self.bwt = bwt_from_sa(text)
+        # Get downsampled suffix array, taking every 1 out of 'cp_i_val'
         # elements w/r/t T
-        self.sampled_sa = self.downsampleSuffixArray(sa, cpIval)
+        self.sampled_sa = self.downsamplesuffix_array(sa, cp_i_val)
         self.slen = len(self.bwt)
         # Make rank checkpoints
-        self.cps = FmCheckpoints(self.bwt, cpIval)
+        self.cps = FmCheckpoints(self.bwt, cp_i_val)
         # Calculate # occurrences of each character
         char_count = dict()
         for char in self.bwt:
@@ -150,17 +150,18 @@ class FmIndex():
         for char, count in sorted(char_count.items()):
             self.first[char] = idx
             idx += count
-    
+
     def count(self, c):
         ''' Return number of occurrences of characters < c '''
         if c not in self.first:
             # (Unusual) case where c does not occur in text
             for char in sorted(self.first.keys()):
-                if c < char: return self.first[char]
+                if c < char:
+                    return self.first[char]
             return self.first[char]
         else:
             return self.first[c]
-    
+
     def range(self, p):
         """
         Computes the range of rows in the BWT that match a given prefix. Utilizes backward searching
@@ -179,7 +180,7 @@ class FmIndex():
             if r < l:
                 break
         return l, r+1
-    
+
     def resolve(self, row):
         """
         Converts a row in the BWT to its corresponding offset in the original text. This method
@@ -191,7 +192,7 @@ class FmIndex():
         Returns:
         - int: The corresponding offset in the original text.
         """
-        def stepLeft(row):
+        def step_left(row):
             """
             A helper function to step left in the BWT. It calculates the next row to move to
             during the resolution process.
@@ -206,11 +207,11 @@ class FmIndex():
             return self.cps.rank(self.bwt, char, row-1) + self.count(char)
         nsteps = 0
         while row not in self.sampled_sa:
-            row = stepLeft(row)
+            row = step_left(row)
             nsteps += 1
         return self.sampled_sa[row] + nsteps
-    
-    def hasSubstring(self, p):
+
+    def has_sub_string(self, p):
         """
         Checks if a given pattern 'p' is a substring of the indexed text. This is achieved
         by checking if there is a non-empty range for the pattern in the BWT.
@@ -223,8 +224,8 @@ class FmIndex():
         """
         l, r = self.range(p)
         return r > l
-    
-    def hasSuffix(self, s):
+
+    def has_suffix(self, s):
         """
         Checks if a given string 's' is a suffix of the indexed text. It first finds the range of 
         BWT rows that match the suffix 's' and then verifies if the resolved position of the first 
@@ -241,7 +242,7 @@ class FmIndex():
         off = self.resolve(l)  # Resolve the first occurrence in the range to its position in the original text
         # Check if the suffix 's' starts at the correct position (end of the text)
         return r > l and off + len(s) == self.slen - 1
-    
+
     def occurrences(self, p):
         """
         Finds all occurrences of a pattern 'p' in the indexed text. It returns a list of
