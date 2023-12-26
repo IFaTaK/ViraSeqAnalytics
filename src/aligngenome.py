@@ -72,7 +72,7 @@ def compare_sequences(reference, comparison):
     for line in lines_to_print:
         print(format_str.format(*line))
 
-def create_reads(seq, reads_len, num_samples):
+def create_reads(sequence, reads_len, num_samples):
     """
     Creates simulated reads from a given DNA sequence.
 
@@ -85,12 +85,12 @@ def create_reads(seq, reads_len, num_samples):
         list: A list of simulated DNA reads.
     """
     reads = []
-    seq_read = seq + seq[:reads_len]
+    sequence_read = sequence + sequence[:reads_len]
     for _ in range(num_samples):
         start = np.random.randint(0,reads_len)
         idx = start
-        while idx < len(seq):
-            reads.append(seq_read[idx:min(idx+reads_len,len(seq_read))])
+        while idx < len(sequence):
+            reads.append(sequence_read[idx:min(idx+reads_len,len(sequence_read))])
             idx += reads_len
     return reads
 
@@ -253,29 +253,29 @@ def correct_offset(original, readed, reads_length):
         str: Corrected read sequence.
     """
     res = readed
-    res = res[:min(len(res),len(original))]
+    res = 2*res[:min(len(res),len(original))]
     max_overlap = 0
     offset = 0
     for idx in range(reads_length):
         if original[:idx] in res and idx > max_overlap:
             offset = res.index(original[:idx])
-            idx = max_overlap
+            max_overlap = idx
     res = res[offset:] + res[:offset]
     return res
 
-def read_sequence(seq, reads_length, num_samples):
+def read_sequence(sequence, reference, reads_length, num_samples):
     """
     Simulates the reading of a DNA sequence, creating reads and merging them.
 
     Args:
-        seq (str): The original DNA sequence.
+        sequence (str): The original DNA sequence.
         read_length (int): Length of each read.
         num_samples (int): Number of reads to generate.
 
     Returns:
         str: The read sequence after merging.
     """
-    reads = create_reads(seq,reads_length,num_samples)
+    reads = create_reads(sequence,reads_length,num_samples)
     seq_with_offset = greedy_sanger_merge(reads)
-    read_seq = correct_offset(seq,seq_with_offset,reads_length)
+    read_seq = correct_offset(sequence,seq_with_offset,reads_length)
     return read_seq
