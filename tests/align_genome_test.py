@@ -1,5 +1,5 @@
 import unittest
-from src.aligngenome import compare_long_sequences, compare_sequences, create_reads, \
+from src.align_genome import compare_long_sequences, compare_sequences, create_reads, \
                        experimental_merge_reads, find_longest_overlap, overlap_length, \
                        greedy_sanger_merge, correct_offset, read_sequence
 
