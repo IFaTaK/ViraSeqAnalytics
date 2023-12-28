@@ -263,7 +263,7 @@ def correct_offset(original, readed, reads_length):
     res = res[offset:] + res[:offset]
     return res
 
-def read_sequence(sequence, reference, reads_length, num_samples):
+def read_sequence(sequence, reads_length, num_samples):
     """
     Simulates the reading of a DNA sequence, creating reads and merging them.
 
