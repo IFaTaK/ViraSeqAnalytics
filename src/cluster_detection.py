@@ -151,17 +151,21 @@ class KMeansClustering:
 
             # Intra-cluster distance
             same_cluster = data[labels == cluster_label]
-            if len(same_cluster)==0:
+            distances = [euclidean_distance(point, other_point) for other_point in same_cluster if not np.array_equal(point, other_point)]
+            if len(distances)==0:
                 silhouette_scores[idx] = 0
                 continue
-            a = np.mean([euclidean_distance(point, other_point) for other_point in same_cluster if not np.array_equal(point, other_point)])
+            a = np.mean(distances)
 
             # Nearest-cluster distance
             b = np.inf
             for other_label in np.unique(labels):
                 if other_label != cluster_label:
                     other_cluster = data[labels == other_label]
-                    other_distance = np.mean([euclidean_distance(point, other_point) for other_point in other_cluster])
+                    if len(other_cluster) == 0:
+                        other_distance = np.inf
+                    else:
+                        other_distance = np.mean([euclidean_distance(point, other_point) for other_point in other_cluster])
                     b = min(b, other_distance)
 
             silhouette_scores[idx] = (b - a) / max(a, b)
