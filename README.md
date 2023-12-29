@@ -17,7 +17,7 @@ The main goal is to identify specific variants by comparing the genome to a refe
 5. **Variant Identification**: Using clustering algorithms to classify different variants.
 
 ## Tools and Technologies
-- **Shotgun Sequencing**
+- **Shotgun Sequencing (Modelisation)**
 - **BWT & FM-index**
 - **Principal Component Analysis**
 - **K-means Clustering**
@@ -28,7 +28,11 @@ The main goal is to identify specific variants by comparing the genome to a refe
 
 ## Current Status and Future Enhancements
 - Initial studies have successfully identified two geographic variants of the coronavirus collected in the same period.
-- Future plans include expanding data collection using the NCBI API, enhancing FASTA file reading capabilities, and developing methods for cluster detection and variant grouping.
+
+![Initial studie](assets/Initial_studie.png)
+*We can observe the separation between the two groups: the first comprising 30 British viruses, and the second consisting of 10 Swiss viruses.*
+
+- Future plans involve expanding our data collection by reading FASTA files and saving them into a database, and then loading elements from the database into Python.
 
 ## Installation and Usage
 (Provide instructions on how to install and use your project.)
