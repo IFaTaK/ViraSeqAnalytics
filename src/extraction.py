@@ -16,11 +16,11 @@ Functions:
 """
 try:
     from genome import REFERENCE_SEQUENCE
-    from fmindex import *
+    from fmindex import FmIndex
 except ImportError:
     from src.genome import REFERENCE_SEQUENCE
-    from src.fmindex import *
-    
+    from src.fmindex import FmIndex
+
 # Creating an FM-index object for the reference genome sequence.
 FMINDEX_REFERENCE = FmIndex(REFERENCE_SEQUENCE)
 
@@ -48,7 +48,7 @@ def extract_gene(sequence, gene_start, gene_end, len_extraction=100):
         list_extraction.append(sequence[k:min(k + len_extraction, gene_end + 1)])
     return list_extraction
 
-def data_from_genome(sequence, fmindex_reference=FMINDEX_REFERENCE, list_idxs_genes=None, len_extraction=100):
+def data_from_genome(sequence, fmindex_reference=FMINDEX_REFERENCE, list_idxs_genes=None, len_extraction=500):
     """
     Analyzes the match rate of specified gene regions in a given sequence against a reference genome.
 
