@@ -156,7 +156,7 @@ class PCAAnalysis:
         quality_representation = transformed_squared_distance / original_squared_distance
         return quality_representation
 
-    def plot_2d(self, point_size=50):
+    def plot_2d(self, point_size=50, fig=None):
         """
         Plot the transformed data in 2D space with a colormap indicating the quality of representation.
         
@@ -167,7 +167,8 @@ class PCAAnalysis:
         transformed_data = self.get_transformed_data_2d()
         quality_representation = self._calculate_quality_representation(2)
 
-        plt.figure(figsize=(13, 8))
+        if not fig:
+            plt.figure(figsize=(13, 8))
         scatter = plt.scatter(transformed_data[:, 0], transformed_data[:, 1],
                               c=quality_representation, cmap='brg', s=point_size,
                               norm=Normalize(vmin=0, vmax=1))
@@ -181,7 +182,7 @@ class PCAAnalysis:
         plt.title('2D PCA with Quality Representation Colormap')
 
 
-    def plot_3d(self, point_size=50):
+    def plot_3d(self, point_size=50, fig=None):
         """
         Plot the transformed data in 3D space with a colormap indicating the quality of representation.
         
@@ -192,7 +193,8 @@ class PCAAnalysis:
         transformed_data = self.get_transformed_data_3d()
         quality_representation = self._calculate_quality_representation(3)
 
-        fig = plt.figure(figsize=(13, 8))
+        if not fig:
+            fig = plt.figure(figsize=(13, 8))
         ax = fig.add_subplot(111, projection='3d')
         scatter = ax.scatter(transformed_data[:, 0], transformed_data[:, 1], transformed_data[:, 2],
                              c=quality_representation, cmap='brg', s=point_size,
@@ -207,7 +209,7 @@ class PCAAnalysis:
 
         ax.set_title('3D PCA with Quality Representation Colormap')
 
-    def biplot_2d(self, labels=None, show_arrows=True, point_size=50):
+    def biplot_2d(self, labels=None, show_arrows=True, point_size=50, fig=None):
         """
         Creates a biplot, which shows both the scores and loadings in PCA space.
 
@@ -221,7 +223,8 @@ class PCAAnalysis:
 
         # Plot the scores
         transformed_data = self.get_transformed_data_2d()
-        plt.figure(figsize=(13, 8))
+        if not fig:
+            plt.figure(figsize=(13, 8))
         plt.scatter(transformed_data[:, 0], transformed_data[:, 1], alpha=0.7, s=point_size)
 
         # Plot the loadings (arrows) if enabled
@@ -240,9 +243,8 @@ class PCAAnalysis:
         plt.ylabel(f'Principal Component 2 ({evr[1]*100:.2f}%)')
         plt.title('PCA Biplot')
         plt.grid(True)
-        
-            
-    def biplot_3d(self, labels=None, show_arrows=True, point_size=50):
+
+    def biplot_3d(self, labels=None, show_arrows=True, point_size=50, fig=None):
         """
         Creates a 3D biplot, which shows both the scores and loadings in PCA space.
 
@@ -256,9 +258,10 @@ class PCAAnalysis:
 
         # Plot the scores
         transformed_data = self.get_transformed_data_3d()
-        fig = plt.figure(figsize=(13, 8))
+        if not fig:
+            fig = plt.figure(figsize=(13, 8))
         ax = fig.add_subplot(111, projection='3d')
-        ax.scatter(transformed_data[:, 0], transformed_data[:, 1], transformed_data[:, 2], 
+        ax.scatter(transformed_data[:, 0], transformed_data[:, 1], transformed_data[:, 2],
                    alpha=0.7, s=point_size)
 
         # Plot the loadings (arrows) if enabled
@@ -266,9 +269,9 @@ class PCAAnalysis:
             if labels is None:
                 labels = [f'Var{i+1}' for i in range(self.data.shape[1])]
             for i in range(self.components.shape[0]):
-                ax.quiver(0, 0, 0, self.components[i, 0], self.components[i, 1], self.components[i, 2], 
+                ax.quiver(0, 0, 0, self.components[i, 0], self.components[i, 1], self.components[i, 2],
                           color='r', alpha=0.5, length=np.linalg.norm(self.components[i, :3]))
-                ax.text(self.components[i, 0], self.components[i, 1], self.components[i, 2], 
+                ax.text(self.components[i, 0], self.components[i, 1], self.components[i, 2],
                         labels[i], color='g', ha='center', va='center')
 
         # Adding explained variance to axis labels
@@ -276,14 +279,17 @@ class PCAAnalysis:
         ax.set_xlabel(f'PC 1 ({evr[0]*100:.2f}%)')
         ax.set_ylabel(f'PC 2 ({evr[1]*100:.2f}%)')
         ax.set_zlabel(f'PC 3 ({evr[2]*100:.2f}%)')
-        
-    def plot_correlation_circle(self, labels = None):
+
+    def plot_correlation_circle(self, labels = None,fig=None):
         """
         Plots the correlation circle showing the projection of the original variables on the principal components.
         """
-        fig, ax = plt.subplots()
+        if not fig:
+            fig, ax = plt.subplots()
+        else:
+            ax = fig.add_subplot(111)
         if labels is None:
-                labels = [f'Var{i+1}' for i in range(self.data.shape[1])]
+            labels = [f'Var{i+1}' for i in range(self.data.shape[1])]
         for i in range(self.correlations.shape[0]):
             ax.arrow(0, 0, self.correlations[i, 0], self.correlations[i, 1], head_width=0.05, head_length=0.1, fc='k', ec='k')
             ax.text(self.correlations[i, 0], self.correlations[i, 1], labels[i], color='red')
@@ -301,29 +307,31 @@ class PCAAnalysis:
         ax.set_ylabel('PC2')
         ax.set_title('Correlation Circle')
 
-    def plot_distance_from_origin(self):
+    def plot_distance_from_origin(self, fig=None):
         """
         Plots a bar graph of the distance of each point from the origin in PCA space.
         """
         distances = np.sqrt(np.sum(self.transformed_data**2, axis=1))
 
-        plt.figure()
+        if not fig:
+            plt.figure()
         plt.bar(range(len(distances)), distances)
         plt.xlabel('Sample Index')
         plt.ylabel('Distance from Origin')
         plt.title('Distance from Origin in PCA Space')
 
-    def plot_explained_variance(self):
+    def plot_explained_variance(self, fig=None):
         """
         Plots a bar graph of the explained variance by each principal component.
         """
-        plt.figure()
+        if not fig:
+            plt.figure()
         plt.bar(range(len(self.explained_variance_ratio)), self.explained_variance_ratio)
         plt.xlabel('Principal Component')
         plt.ylabel('Explained Variance Ratio')
         plt.title('Explained Variance by PCA Components')
 
-    def plot_scree(self):
+    def plot_scree(self, fig=None):
         """
         Plots the scree plot of the PCA analysis.
 
@@ -331,7 +339,8 @@ class PCAAnalysis:
         It helps in determining the number of principal components to retain by showing how much 
         variance is captured by each successive principal component.
         """
-        plt.figure()
+        if not fig:
+            plt.figure()
         plt.plot(range(len(self.explained_variance_ratio)+1), [0] + list(np.cumsum(self.explained_variance_ratio)))
         plt.xlabel('Number of Components')
         plt.ylabel('Cumulative Explained Variance')
