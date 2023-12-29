@@ -17,7 +17,7 @@ The main goal is to identify specific variants by comparing the genome to a refe
 5. **Variant Identification**: Using clustering algorithms to classify different variants.
 
 ## Tools and Technologies
-- **Shotgun Sequencing**
+- **Shotgun Sequencing (Modelisation)**
 - **BWT & FM-index**
 - **Principal Component Analysis**
 - **K-means Clustering**
@@ -28,10 +28,60 @@ The main goal is to identify specific variants by comparing the genome to a refe
 
 ## Current Status and Future Enhancements
 - Initial studies have successfully identified two geographic variants of the coronavirus collected in the same period.
-- Future plans include expanding data collection using the NCBI API, enhancing FASTA file reading capabilities, and developing methods for cluster detection and variant grouping.
+
+![Initial studie](assets/Initial_studie.png)
+*We can observe the separation between the two groups: the first comprising 30 British viruses, and the second consisting of 10 Swiss viruses.*
+
+- Future plans involve expanding our data collection by reading FASTA files and saving them into a database, and then loading elements from the database into Python.
 
 ## Installation and Usage
-(Provide instructions on how to install and use your project.)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/IFaTaK/ViraSeqAnalytics.git
+   ```
+
+2. Navigate to the project directory:
+   ```bash
+   cd ViraSeqAnalytics
+   ```
+
+3. **Create a virtual environment:**
+   ```bash
+   python -m venv venv
+   ```
+
+4. **Activate the virtual environment:**
+   - On Windows:
+     ```bash
+     .\venv\Scripts\activate
+     ```
+   - On macOS and Linux:
+     ```bash
+     source venv/bin/activate
+     ```
+
+5. **Install the required modules:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+### Usage
+
+To use the ViraSeqAnalytics project, you can run the main script or import and use individual modules as per your needs. Here are some basic steps to get started:
+
+1. **Running the Main Script:**
+   - If there is a main script provided, execute it using:
+     ```bash
+     python main.py
+     ```
+
+2. **Data Analysis and Visualization:**
+   - The project includes modules for data analysis and visualization. Explore these modules for various bioinformatics analysis tasks.
+
+For more detailed documentation and usage examples, please refer to the project's [GitHub repository](https://github.com/IFaTaK/ViraSeqAnalytics).
 
 ## Acknowledgements
 This project was initiated as a collaborative effort between [Kilian LEFEVRE](https://github.com/IFaTaK), Anthony CANNIAUX, and Baptiste ORTILLION. Kilian LEFEVRE is currently leading further development and enhancements.
