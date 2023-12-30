@@ -261,6 +261,7 @@ def correct_offset(original, readed, reads_length):
             offset = res.index(original[:idx])
             max_overlap = idx
     res = res[offset:] + res[:offset]
+    res = res[:len(readed)]
     return res
 
 def read_sequence(sequence, reads_length, num_samples):
