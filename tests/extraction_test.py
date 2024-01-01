@@ -10,11 +10,12 @@ class TestGeneExtraction(unittest.TestCase):
         cls.sample_gene_start = 100
         cls.sample_gene_end = 200
         cls.len_extraction = 50
-        cls.list_idxs_genes = [(100, 200)] 
+        cls.list_idxs_genes = [(100, 200)]
 
     def test_extract_gene_valid_input(self):
         # Test extraction with valid inputs
         result = extract_gene(self.sample_sequence, self.sample_gene_start, self.sample_gene_end, self.len_extraction)
+        print(result)
         self.assertEqual(len(result), 3)  # Check if the correct number of segments are extracted
 
     def test_extract_gene_invalid_input(self):
