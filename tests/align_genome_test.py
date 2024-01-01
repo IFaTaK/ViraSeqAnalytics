@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 from src.align_genome import compare_long_sequences, compare_sequences, create_reads, \
                        experimental_merge_reads, find_longest_overlap, overlap_length, \
                        greedy_sanger_merge, correct_offset, read_sequence
@@ -39,23 +40,24 @@ class TestAlignGenome(unittest.TestCase):
         # Test finding the longest overlap
         reads = ['ACGT', 'CGTA', 'GTAC']
         read1, read2, overlap = find_longest_overlap(reads)
-        self.assertIsNotNone(read1)
-        self.assertIsNotNone(read2)
-        self.assertNotEqual(overlap, '')
+        self.assertEqual(read1, 0)
+        self.assertEqual(read2, 1)
+        self.assertEqual(overlap, 'CGT')
 
     def test_overlap_length(self):
         # Test calculating overlap length
         read1 = 'ACGT'
         read2 = 'CGTA'
         length, overlap = overlap_length(read1, read2, 2)
-        self.assertGreater(length, 0)
-        self.assertNotEqual(overlap, '')
+        self.assertEqual(length, 3)
+        self.assertEqual(overlap, 'CGT')
 
     def test_greedy_sanger_merge(self):
         # Test greedy merging of reads
         reads = ['ACGT', 'CGTA', 'GTAC']
         result = greedy_sanger_merge(reads)
         self.assertIsInstance(result, str)
+        self.assertEqual(result, "ACGTAC")
 
     def test_correct_offset(self):
         # Test correcting offset in a read
@@ -66,11 +68,12 @@ class TestAlignGenome(unittest.TestCase):
 
     def test_read_sequence(self):
         # Test simulating read sequence
-        sequence = 'ACGT' * 10
+        sequence = "".join([np.random.choice(["A","T","C","G"]) for _ in range(50)])
         read_length = 10
         num_samples = 5
         result = read_sequence(sequence, read_length, num_samples)
         self.assertIsInstance(result, str)
+        self.assertEqual(result,sequence)
 
 if __name__ == '__main__':
     unittest.main()

@@ -252,17 +252,17 @@ def correct_offset(original, readed, reads_length):
     Returns:
         str: Corrected read sequence.
     """
-    res = readed
-    res = 2*res[:min(len(res),len(original))]
+    result = readed
+    result = 2*result[:min(len(result),len(original))]
     max_overlap = 0
     offset = 0
     for idx in range(reads_length):
-        if original[:idx] in res and idx > max_overlap:
-            offset = res.index(original[:idx])
+        if original[:idx] in result and idx > max_overlap:
+            offset = result.index(original[:idx])
             max_overlap = idx
-    res = res[offset:] + res[:offset]
-    res = res[:len(readed)]
-    return res
+    result = result[offset:] + result[:offset]
+    result = result[:min(len(result),len(original))]
+    return result
 
 def read_sequence(sequence, reads_length, num_samples):
     """
