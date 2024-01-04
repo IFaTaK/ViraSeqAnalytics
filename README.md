@@ -98,3 +98,33 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 For any inquiries or further information about this project, please use the [Issues section of this GitHub repository](https://github.com/IFaTaK/RNA_Sequencing/issues). This is the preferred channel for questions, suggestions, or discussions regarding the project.
 
 For more about my work and contributions, you can visit [my GitHub profile](https://github.com/IFaTaK).
+
+```
+ViraSeqAnalytics
+├─ assets
+│  ├─ Initial_studie.png
+│  └─ project-banner.png
+├─ src
+│  ├─ __init__.py
+│  ├─ align_genome.py
+│  ├─ bwt.py
+│  ├─ cluster_detection.py
+│  ├─ extraction.py
+│  ├─ fmindex.py
+│  ├─ genome.py
+│  └─ pca.py
+├─ tests
+│  ├─ __init__.py
+│  ├─ align_genome_test.py
+│  ├─ bwt_test.py
+│  ├─ cluster_detection_test.py
+│  ├─ extraction_test.py
+│  ├─ fmindex_test.py
+│  └─ pca_test.py
+├─ LICENSE
+├─ README.md
+├─ __init__.py
+├─ main.py
+├─ requirements.txt
+└─ setup.py
+```
