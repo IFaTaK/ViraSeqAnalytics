@@ -84,7 +84,7 @@ To use the ViraSeqAnalytics project, you can run the main script or import and u
 For more detailed documentation and usage examples, please refer to the project's [GitHub repository](https://github.com/IFaTaK/ViraSeqAnalytics).
 
 ## Acknowledgements
-This project was initiated as a collaborative effort between [Kilian LEFEVRE](https://github.com/IFaTaK), [Anthony CANNIAUX](https://github.com/CrinoX-3) and Baptiste ORTILLION. Kilian LEFEVRE is currently leading further development and enhancements.
+This project was initiated as a collaborative effort between [Kilian LEFEVRE](https://github.com/IFaTaK), [Anthony CANNIAUX](https://github.com/CrinoX-3) and [Baptiste ORTILLION](https://github.com/BaptisteOrtillion). Kilian LEFEVRE is currently leading further development and enhancements.
 
 ## License
 This project is licensed under the GNU General Public License.
